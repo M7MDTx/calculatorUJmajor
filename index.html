@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>حساب المعدل التراكمي</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            direction: rtl;
+            text-align: right;
+            margin: 0;
+            padding: 0;
+            background: #f4f4f9;
+        }
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            font-size: 24px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #555;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        button {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .result {
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+            text-align: center;
+            padding: 10px;
+            background: #e0f7fa;
+            border: 1px solid #b2ebf2;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>حساب المعدل التراكمي</h1>
+        <label for="gpa">أدخل المعدل التراكمي:</label>
+        <input type="number" id="gpa" step="0.01" min="0" max="5">
+
+        <label for="subject1">أدخل درجة المادة 1:</label>
+        <input type="number" id="subject1" step="0.01" min="0" max="100">
+
+        <label for="subject2">أدخل درجة المادة 2:</label>
+        <input type="number" id="subject2" step="0.01" min="0" max="100">
+
+        <label for="subject3">أدخل درجة المادة 3:</label>
+        <input type="number" id="subject3" step="0.01" min="0" max="100">
+
+        <label for="subject4">أدخل درجة المادة 4:</label>
+        <input type="number" id="subject4" step="0.01" min="0" max="100">
+
+        <label for="subject5">أدخل درجة المادة 5:</label>
+        <input type="number" id="subject5" step="0.01" min="0" max="100">
+
+        <label for="achievement">أدخل درجة التحصيلي:</label>
+        <input type="number" id="achievement" step="0.01" min="0" max="100">
+
+        <label for="aptitude">أدخل درجة القدرات:</label>
+        <input type="number" id="aptitude" step="0.01" min="0" max="100">
+
+        <button onclick="calculateAverage()">احسب المعدل النهائي</button>
+
+        <div class="result" id="result"></div>
+    </div>
+
+    <script>
+        function calculateAverage() {
+            var gpa = parseFloat(document.getElementById('gpa').value) * 20;
+            var subjectGrades = [
+                parseFloat(document.getElementById('subject1').value),
+                parseFloat(document.getElementById('subject2').value),
+                parseFloat(document.getElementById('subject3').value),
+                parseFloat(document.getElementById('subject4').value),
+                parseFloat(document.getElementById('subject5').value)
+            ];
+            var achievementScore = parseFloat(document.getElementById('achievement').value);
+            var aptitudeScore = parseFloat(document.getElementById('aptitude').value);
+
+            var gpaWeight = 0.4;
+            var gpaScore = gpa * gpaWeight;
+
+            var subjectWeight = 0.3 / subjectGrades.length;
+            var subjectScore = subjectGrades.reduce((a, b) => a + b, 0) * subjectWeight;
+
+            var achievementWeight = 0.15;
+            var achievementScoreWeighted = achievementScore * achievementWeight;
+
+            var aptitudeWeight = 0.15;
+            var aptitudeScoreWeighted = aptitudeScore * aptitudeWeight;
+
+            var finalScore = gpaScore + subjectScore + achievementScoreWeighted + aptitudeScoreWeighted;
+
+            document.getElementById('result').innerText = `المعدل النهائي هو: ${finalScore.toFixed(2)}`;
+        }
+    </script>
+</body>
+</html>
