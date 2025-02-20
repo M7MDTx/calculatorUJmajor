@@ -76,18 +76,20 @@
         <label for="aptitude">أدخل درجة القدرات:</label>
         <input type="number" id="aptitude" step="0.01" min="0" max="100">
 
-        <div id="subjects">
-            <script>
-                for (let i = 1; i <= 5; i++) {
-                    document.write(`
-                        <label for="subject${i}">أدخل درجة المادة ${i}:</label>
-                        <input type="number" id="subject${i}" step="0.01" min="0" max="100">
-                        <label for="hours${i}">عدد الساعات:</label>
-                        <input type="number" id="hours${i}" step="1" min="0" max="6">
-                    `);
-                }
-            </script>
-        </div>
+        <label for="physics">فيزياء (4 ساعات):</label>
+        <input type="number" id="physics" step="0.01" min="0" max="100">
+
+        <label for="chemistry">كيمياء (4 ساعات):</label>
+        <input type="number" id="chemistry" step="0.01" min="0" max="100">
+
+        <label for="biology">أحياء (4 ساعات):</label>
+        <input type="number" id="biology" step="0.01" min="0" max="100">
+
+        <label for="english130">إنجليزي 130 (ساعتين):</label>
+        <input type="number" id="english130" step="0.01" min="0" max="100">
+
+        <label for="english140">إنجليزي 140 (ساعتين):</label>
+        <input type="number" id="english140" step="0.01" min="0" max="100">
 
         <p>ملاحظة: إذا معادل الإنجليزي حط 0</p>
 
@@ -98,34 +100,33 @@
     <script>
         function calculateAverage() {
             const gpa = parseFloat(document.getElementById('gpa').value) * 20 || 0;
-            let totalHours = 0;
+            let totalHours = 16;
             let weightedGrade = 0;
-            let remainingWeight = 0.3;
-            let validSubjects = 0;
-
-            for (let i = 1; i <= 5; i++) {
-                const grade = parseFloat(document.getElementById(`subject${i}`).value) || 0;
-                const hours = parseFloat(document.getElementById(`hours${i}`).value) || 0;
-                
-                if (grade > 0 && hours > 0) {
-                    totalHours += hours;
-                    weightedGrade += grade * hours;
-                    validSubjects++;
+            const subjects = [
+                { id: 'physics', hours: 4 },
+                { id: 'chemistry', hours: 4 },
+                { id: 'biology', hours: 4 },
+                { id: 'english130', hours: 2 },
+                { id: 'english140', hours: 2 }
+            ];
+            
+            let totalValidHours = 0;
+            subjects.forEach(subject => {
+                const grade = parseFloat(document.getElementById(subject.id).value) || 0;
+                if (grade > 0) {
+                    weightedGrade += grade * subject.hours;
+                    totalValidHours += subject.hours;
+                } else {
+                    totalHours -= subject.hours;
                 }
-            }
-
-            if (validSubjects > 0) {
-                remainingWeight /= validSubjects;
-                weightedGrade = (weightedGrade / totalHours) * 0.3;
-            } else {
-                weightedGrade = 0;
-            }
-
+            });
+            
             const finalGpa = gpa * 0.4;
             const achievement = (parseFloat(document.getElementById('achievement').value) || 0) * 0.15;
             const aptitude = (parseFloat(document.getElementById('aptitude').value) || 0) * 0.15;
             
-            const finalScore = finalGpa + weightedGrade + achievement + aptitude;
+            let subjectScore = totalValidHours > 0 ? (weightedGrade / totalValidHours) * 0.3 : 0;
+            const finalScore = finalGpa + subjectScore + achievement + aptitude;
             document.getElementById('result').innerText = `المعدل النهائي هو: ${finalScore.toFixed(2)}`;
         }
     </script>
